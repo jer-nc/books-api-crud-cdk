@@ -2,7 +2,15 @@
 
 ## AWS CDK Backend Stack
 
-This project showcases the usage of the AWS Cloud Development Kit (CDK) to provision an AWS infrastructure stack for managing books. The stack includes resources such as an Amazon DynamoDB table for storing book information and AWS Lambda functions for handling CRUD (Create, Read, Update, Delete) operations on the books.
+This project showcases the usage of the AWS Cloud Development Kit (CDK) to provision an AWS infrastructure stack for managing books. The stack includes resources such as an Amazon DynamoDB table for storing book information and AWS Lambda functions for handling CRUD (Create, Read, Update, Delete) operations on the books. 
+
+![](./backend/cdk-crud-books-nextj13.webp)
+
+## Frontend Demo
+
+You can find a demo of the frontend application that uses this backend stack [here](https://main.d1v7b18a5j9npz.amplifyapp.com/).
+
+Source code for the frontend application can be found [here](https://github.com/jer-nc/fullstack-book-crud-cdk-nextjs13/tree/main).
 
 
 ## AWS Resources Created
@@ -26,6 +34,19 @@ The AWS CDK stack created by this project includes the following AWS resources:
 - An API Gateway named `Books` is created with the following endpoints:
   - `/books`: For listing, creating, and deleting books.
   - `/books/{bookId}`: For retrieving individual books.
+
+
+
+## Cognito User Pool & Authorizer
+
+This project also includes user authentication using Amazon Cognito.
+
+A user pool client is created to manage user access to the API. The API Gateway is configured to use this user pool as an authorizer, requiring users to sign in before they can access the API endpoints.
+
+## Documentation
+
+In each resource folder (e.g. `lib/api`), there is a `README.md` file that contains information about the resource. 
+
 
 
 ## References:

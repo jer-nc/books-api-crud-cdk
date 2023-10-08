@@ -41,30 +41,59 @@ export const createCRUDLAPIGateway = (scope: Construct, props: CRUDLAPIGatewayPr
     const getItemLeafIntegration = new LambdaIntegration(props.getItemLeafFunc)
 
     // Add the PUT, POST and DELETE methods to the base resource
-    baseResource.addMethod('PUT', putItemBaseIntegration)
-    baseResource.addMethod('POST', putItemBaseIntegration)
-    baseResource.addMethod('DELETE', deleteItemBaseIntegration)
-    
+    // baseResource.addMethod('PUT', putItemBaseIntegration)
+    // baseResource.addMethod('POST', putItemBaseIntegration)
+    // baseResource.addMethod('DELETE', deleteItemBaseIntegration)
+
     const authorizer = new CfnAuthorizer(scope, 'CognitoAuthorizer', {
         restApiId: api.restApiId,
         name: 'CognitoAuthorizer',
         type: AuthorizationType.COGNITO,
         identitySource: 'method.request.header.Authorization',
         providerArns: [props.userPoolClient.userPoolArn],
-      });
+    });
 
     // Add the GET method to the base resource
-    baseResource.addMethod('GET', getAllBaseIntegration ,{
+    baseResource.addMethod('GET', getAllBaseIntegration, {
         authorizationType: AuthorizationType.COGNITO,
         authorizer: {
             authorizerId: authorizer.ref
         }
     })
 
-    // Add the GET method to the leaf resource
-    leafResource.addMethod('GET', getItemLeafIntegration)
+    // Add the POST method to the base resource with authorizer
+    baseResource.addMethod('POST', putItemBaseIntegration, {
+        authorizationType: AuthorizationType.COGNITO,
+        authorizer: {
+            authorizerId: authorizer.ref
+        }
+    })
 
-    
+    // Add the PUT method to the leaf resource with authorizer
+    baseResource.addMethod('PUT', putItemBaseIntegration, {
+        authorizationType: AuthorizationType.COGNITO,
+        authorizer: {
+            authorizerId: authorizer.ref
+        }
+    })
+
+
+    // Add the DELETE method to the base resource with authorizer
+    baseResource.addMethod('DELETE', deleteItemBaseIntegration, {
+        authorizationType: AuthorizationType.COGNITO,
+        authorizer: {
+            authorizerId: authorizer.ref
+        }
+    })
+
+    // Add the GET method to the leaf resource with authorizer 
+    leafResource.addMethod('GET', getItemLeafIntegration, {
+        authorizationType: AuthorizationType.COGNITO,
+        authorizer: {
+            authorizerId: authorizer.ref
+        }
+    })
+
 
     return api
 }
